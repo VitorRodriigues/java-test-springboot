@@ -1,19 +1,16 @@
 package br.com.apivitor.api.controller;
 
-import br.com.apivitor.api.model.UserModel;
 import br.com.apivitor.api.model.dto.UserDto;
 import br.com.apivitor.api.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
@@ -33,5 +30,11 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserDto>> findAll() {
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAll().stream().map(x -> mapper.map(x, UserDto.class)).toList());
+    }
+
+    @PostMapping
+    public ResponseEntity<UserDto> create(@RequestBody UserDto user) {
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/findById/{id}").buildAndExpand(userService.create(user).getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 }

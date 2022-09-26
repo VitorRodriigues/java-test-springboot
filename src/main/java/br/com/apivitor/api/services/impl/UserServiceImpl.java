@@ -1,5 +1,6 @@
 package br.com.apivitor.api.services.impl;
 
+import br.com.apivitor.api.exceptions.ObjectNotFoundException;
 import br.com.apivitor.api.model.UserModel;
 import br.com.apivitor.api.repository.UserRepository;
 import br.com.apivitor.api.services.UserService;
@@ -18,6 +19,6 @@ public class UserServiceImpl implements UserService {
     public UserModel findById(Long id) {
         Optional<UserModel> userModel = this.userRepository.findById(id);
 
-        return userModel.orElse(null);
+        return userModel.orElseThrow(() -> new ObjectNotFoundException("Object Not Found"));
     }
 }

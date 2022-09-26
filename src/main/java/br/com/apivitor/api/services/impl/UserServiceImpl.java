@@ -7,6 +7,7 @@ import br.com.apivitor.api.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,5 +21,10 @@ public class UserServiceImpl implements UserService {
         Optional<UserModel> userModel = this.userRepository.findById(id);
 
         return userModel.orElseThrow(() -> new ObjectNotFoundException("Object Not Found"));
+    }
+
+    @Override
+    public List<UserModel> findAll() {
+        return userRepository.findAll();
     }
 }

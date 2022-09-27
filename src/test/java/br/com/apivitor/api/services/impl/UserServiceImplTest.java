@@ -1,5 +1,6 @@
 package br.com.apivitor.api.services.impl;
 
+import br.com.apivitor.api.exceptions.ObjectNotFoundException;
 import br.com.apivitor.api.model.UserModel;
 import br.com.apivitor.api.model.dto.UserDto;
 import br.com.apivitor.api.repository.UserRepository;
@@ -23,6 +24,7 @@ class UserServiceImplTest {
     public static final String NAME = "Vitor";
     public static final String EMAIL = "vitor@mail.com";
     public static final String PASSWORD = "123456";
+    public static final String OBJECT_NOT_FOUND = "Object Not Found";
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -54,6 +56,18 @@ class UserServiceImplTest {
         assertEquals(ID, response.getId());
         assertEquals(NAME, response.getName());
         assertEquals(EMAIL, response.getEmail());
+    }
+
+    @Test
+    void whenFindByIdThenReturnAndObjectNotFoundException() {
+        Mockito.when(userRepository.findById(Mockito.anyLong())).thenThrow(new ObjectNotFoundException(OBJECT_NOT_FOUND));
+
+        try {
+            userService.findById(ID);
+        } catch (Exception ex) {
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals(OBJECT_NOT_FOUND, ex.getMessage());
+        }
     }
 
     @Test

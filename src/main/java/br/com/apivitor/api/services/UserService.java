@@ -14,4 +14,6 @@ public interface UserService {
     UserModel create(UserDto user);
 
     UserModel update(UserDto user);
+
+    void delete(Long id);
 }

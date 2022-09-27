@@ -13,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,6 +26,7 @@ class UserServiceImplTest {
     public static final String EMAIL = "vitor@mail.com";
     public static final String PASSWORD = "123456";
     public static final String OBJECT_NOT_FOUND = "Object Not Found";
+    public static final int INDEX = 0;
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -71,11 +73,32 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findAll() {
+    void whenFindAllThenReturnAnListOfUsers() {
+        Mockito.when(userRepository.findAll()).thenReturn(List.of(user));
+
+        List<UserModel> response = userService.findAll();
+
+        assertNotNull(response);
+        assertEquals(1, response.size());
+        assertEquals(UserModel.class, response.get(INDEX).getClass());
+        assertEquals(ID, response.get(INDEX).getId());
+        assertEquals(NAME, response.get(INDEX).getName());
+        assertEquals(EMAIL, response.get(INDEX).getEmail());
+
     }
 
     @Test
-    void create() {
+    void whenCreateThenReturnSuccess() {
+        Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
+
+        UserModel response = userService.create(userDTO);
+
+        assertNotNull(response);
+        assertEquals(UserModel.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(NAME, response.getName());
+        assertEquals(EMAIL, response.getEmail());
+        assertEquals(PASSWORD, response.getPassword());
     }
 
     @Test

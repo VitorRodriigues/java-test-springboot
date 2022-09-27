@@ -1,5 +1,6 @@
 package br.com.apivitor.api.controller;
 
+import br.com.apivitor.api.model.UserModel;
 import br.com.apivitor.api.model.dto.UserDto;
 import br.com.apivitor.api.services.UserService;
 import org.modelmapper.ModelMapper;
@@ -36,5 +37,12 @@ public class UserController {
     public ResponseEntity<UserDto> create(@RequestBody UserDto user) {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/findById/{id}").buildAndExpand(userService.create(user).getId()).toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<UserModel> update(@PathVariable Long id, @RequestBody UserDto user) {
+        user.setId(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(mapper.map(userService.update(user), UserModel.class));
     }
 }

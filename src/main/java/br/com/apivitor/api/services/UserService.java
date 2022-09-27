@@ -12,4 +12,6 @@ public interface UserService {
     List<UserModel> findAll();
 
     UserModel create(UserDto user);
+
+    UserModel update(UserDto user);
 }

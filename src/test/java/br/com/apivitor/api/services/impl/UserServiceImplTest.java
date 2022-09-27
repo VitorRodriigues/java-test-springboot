@@ -1,5 +1,6 @@
 package br.com.apivitor.api.services.impl;
 
+import br.com.apivitor.api.exceptions.DataIntegrityViolationException;
 import br.com.apivitor.api.exceptions.ObjectNotFoundException;
 import br.com.apivitor.api.model.UserModel;
 import br.com.apivitor.api.model.dto.UserDto;
@@ -27,6 +28,7 @@ class UserServiceImplTest {
     public static final String PASSWORD = "123456";
     public static final String OBJECT_NOT_FOUND = "Object Not Found";
     public static final int INDEX = 0;
+    public static final String E_MAIL_IS_ALREADY_REGISTERED = "E-mail is already registered";
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -99,6 +101,19 @@ class UserServiceImplTest {
         assertEquals(NAME, response.getName());
         assertEquals(EMAIL, response.getEmail());
         assertEquals(PASSWORD, response.getPassword());
+    }
+
+    @Test
+    void whenCreateThenReturnAnyDataIntegrityViolationException() {
+        Mockito.when(userRepository.findByEmail(Mockito.anyString())).thenReturn(optionalUser);
+
+        try {
+            optionalUser.get().setId(2L);
+            userService.create(userDTO);
+        } catch (Exception ex) {
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
+            assertEquals(E_MAIL_IS_ALREADY_REGISTERED, ex.getMessage());
+        }
     }
 
     @Test

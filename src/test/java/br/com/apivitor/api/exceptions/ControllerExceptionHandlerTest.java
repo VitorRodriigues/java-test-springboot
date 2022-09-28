@@ -15,6 +15,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class ControllerExceptionHandlerTest {
 
     public static final String OBJECT_NOT_FOUND = "Object Not Found";
+    public static final String E_MAIL_IS_ALREADY_REGISTERED = "E-mail is already registered";
+
     @InjectMocks
     private ControllerExceptionHandler exceptionHandler;
 
@@ -40,5 +42,16 @@ class ControllerExceptionHandlerTest {
 
     @Test
     void dataIntegrityViolationException() {
+        ResponseEntity<StandardError> response = exceptionHandler
+                .dataIntegrityViolationException(new DataIntegrityViolationException(E_MAIL_IS_ALREADY_REGISTERED),
+                        new MockHttpServletRequest());
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(StandardError.class, response.getBody().getClass());
+        assertEquals(E_MAIL_IS_ALREADY_REGISTERED, response.getBody().getError());
+        assertEquals(400, response.getBody().getStatus());
     }
 }

@@ -131,6 +131,19 @@ class UserServiceImplTest {
     }
 
     @Test
+    void whenUpdateThenReturnAnyDataIntegrityViolationException() {
+        Mockito.when(userRepository.findByEmail(Mockito.anyString())).thenReturn(optionalUser);
+
+        try {
+            optionalUser.get().setId(2L);
+            userService.update(userDTO);
+        } catch (Exception ex) {
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
+            assertEquals(E_MAIL_IS_ALREADY_REGISTERED, ex.getMessage());
+        }
+    }
+
+    @Test
     void update() {
     }
 

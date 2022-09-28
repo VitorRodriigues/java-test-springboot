@@ -97,7 +97,21 @@ class UserControllerTest {
     }
 
     @Test
-    void update() {
+    void whenUpdateThenReturnSuccess() {
+        Mockito.when(userService.update(userDTO)).thenReturn(user);
+        Mockito.when(mapper.map(Mockito.any(), Mockito.any())).thenReturn(userDTO);
+
+        ResponseEntity<UserDto> response = userController.update(ID, userDTO);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(UserDto.class, response.getBody().getClass());
+
+        assertEquals(ID, response.getBody().getId());
+        assertEquals(NAME, response.getBody().getName());
+        assertEquals(EMAIL, response.getBody().getEmail());
     }
 
     @Test

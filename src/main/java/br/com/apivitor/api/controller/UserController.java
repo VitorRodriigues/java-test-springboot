@@ -40,10 +40,10 @@ public class UserController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<UserModel> update(@PathVariable Long id, @RequestBody UserDto user) {
+    public ResponseEntity<UserDto> update(@PathVariable Long id, @RequestBody UserDto user) {
         user.setId(id);
 
-        return ResponseEntity.status(HttpStatus.OK).body(mapper.map(userService.update(user), UserModel.class));
+        return ResponseEntity.status(HttpStatus.OK).body(mapper.map(userService.update(user), UserDto.class));
     }
 
     @DeleteMapping("/delete/{id}")

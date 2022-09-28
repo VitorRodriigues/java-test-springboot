@@ -164,9 +164,6 @@ class UserServiceImplTest {
         }
     }
 
-    @Test
-    void findByEmail() {
-    }
 
     private void startUser() {
         user = new UserModel(ID, NAME, EMAIL, PASSWORD);
